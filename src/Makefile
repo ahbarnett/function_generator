@@ -4,17 +4,18 @@ F90 ?= gfortran
 
 CFLAGS+=-I$(CONDA_PREFIX)/include -Wall -g -flto -O3 -ffast-math -march=native
 LDFLAGS+=-L$(CONDA_PREFIX)/lib -Wl,-rpath $(CONDA_PREFIX)/lib -flto -O3
+CLIBS+= -lgsl -lgslcblas -lm
 
 function_generator.o : function_generator.hpp fg_interface.h fg_interface.cpp
 	$(CXX) $(CFLAGS) -std=c++11 -c fg_interface.cpp -o function_generator.o
 
 cpp_example : cpp_example.cpp
 	$(CXX) $(CFLAGS) -std=c++11 -c cpp_example.cpp
-	$(CXX) cpp_example.o -o cpp_example $(LDFLAGS) -lgsl
+	$(CXX) cpp_example.o -o cpp_example $(LDFLAGS) $(CLIBS)
 
 c_example : function_generator.o c_example.c
 	$(CC) $(CFLAGS) -c c_example.c
-	$(CC) c_example.o function_generator.o -lm -lstdc++ -o c_example $(LDFLAGS) -lgsl
+	$(CC) c_example.o function_generator.o -lm -lstdc++ -o c_example $(LDFLAGS) $(CLIBS)
 
 fortran_example : function_generator.o fortran_example.f90
 	$(F90) $(CFLAGS) -c fg_interface.f90

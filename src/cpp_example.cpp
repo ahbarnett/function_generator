@@ -106,10 +106,11 @@ int main(int argc, char *argv[]) {
     std::cout << "RNG generation took " << time_span.count() << " seconds.\n";
 
     std::vector<func_t<double>> double_funcs{
-        func_t<double>{"log", 1e-15, 1000,
+      func_t<double>{"log", 1e-08, 1000,           // was 1e-15, no diff.
                        static_cast<double (*)(double)>(std::log)},
         func_t<double>{"gsl_sf_bessel_J0", 0, 100, gsl_sf_bessel_J0},
         func_t<double>{"gsl_sf_bessel_I0", 0, 100, gsl_sf_bessel_I0},
+          func_t<double>{"gsl_sf_bessel_Y0", 1E-4, 100, gsl_sf_bessel_Y0}, // ahb added
         func_t<double>{"std::erfc", -2, 2,
                        static_cast<double (*)(double)>(std::erfc)},
         func_t<double>{"std::erf", -2, 2,
